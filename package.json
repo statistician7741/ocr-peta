@@ -1,0 +1,26 @@
+{
+  "name": "ocr-peta",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^3.2.0",
+    "canvas": "^2.7.0",
+    "image-clipper": "^0.4.4",
+    "node-tesseract": "^0.2.7",
+    "node-tesseract-ocr": "^2.0.0",
+    "node-xlsx": "^0.16.1",
+    "pdf-extract": "^1.0.11",
+    "pdf-ocr": "^0.1.0",
+    "pdf2img": "github:fitraditya/node-pdf2img#pull/54/head",
+    "pdf2pic": "^2.1.4",
+    "tesseract.js": "^2.1.4",
+    "xlsx-populate": "^1.21.0"
+  }
+}
