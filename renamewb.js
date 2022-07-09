@@ -54,12 +54,7 @@ data[0].data.forEach((row, i) => {
 semuapeta.forEach(filename => {
     var name = filename
     task.push((cb_t) => {
-        try {
-            renamePeta(name, 90, cb_t)
-        } catch (error) {
-            console.log(error);
-            cb_t(null, 'failed')
-        }
+        renamePeta(name, 90, cb_t)
     })
 })
 async.series(task, (e, f) => {
@@ -69,7 +64,10 @@ async.series(task, (e, f) => {
 
 async function rotateImg(path, degree, cb) {
     imgReaded = Jimp.read(path, (err, img) => {
-        if (err) throw err
+        if (err){
+            cb(err)
+            return;
+        }
         img.rotate(degree).write(path, () => {
             console.log('1. Rotate done')
             cb()
@@ -87,7 +85,12 @@ function renamePeta(nama, degree, cb_rename) {
         cropImage: (cb_c) => {
             console.log('==================');
             console.log('==> ', filename);
-            rotateImg(input_ready_file, degree, () => {
+            rotateImg(input_ready_file, degree, (err) => {
+                if(err){
+                    console.log('2. cropImage failed');
+                    cb_c('2. cropImage failed', null)
+                    return
+                }
                 Clipper(input_ready_file, function () {
                     if (!fs.existsSync(`${output_folder}/cropped`)) {
                         fs.mkdirSync(`${output_folder}/cropped`);
@@ -97,7 +100,7 @@ function renamePeta(nama, degree, cb_rename) {
                         .quality(100)
                         .toFile(`${output_folder}/cropped/${filename}_ok.jpg`, function () {
                             console.log('2. cropImage done')
-                            cb_c(null, '3. cropImage done')
+                            cb_c(null, '2. cropImage done')
                         });
                 });
             })
@@ -158,13 +161,14 @@ function renamePeta(nama, degree, cb_rename) {
                     else {
                         console.log('3. getIDAndRename failed.')
                         console.log('Detected text: ', filename, text)
-                        cb_g(null, '3. getIDAndRename failed')
+                        cb_g('3. getIDAndRename failed', null)
                     }
 
                 }
             })
         }]
     }, (e, f) => {
+        if(!e) fs.renameSync(`${input_folder}/${filename}.JPG`, `./input/mentah/sudah/${filename}.JPG`);
         console.log(filename + ' finish.')
         cb_rename && cb_rename(null, 'ok')
     })
