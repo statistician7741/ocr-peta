@@ -13,6 +13,7 @@
     "async": "^3.2.0",
     "canvas": "^2.7.0",
     "image-clipper": "^0.4.4",
+    "jimp": "^0.16.1",
     "node-tesseract": "^0.2.7",
     "node-tesseract-ocr": "^2.0.0",
     "node-xlsx": "^0.16.1",
