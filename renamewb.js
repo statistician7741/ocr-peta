@@ -168,7 +168,7 @@ function renamePeta(nama, degree, cb_rename) {
             })
         }]
     }, (e, f) => {
-        if(!e) fs.renameSync(`${input_folder}/${filename}.JPG`, `./input/mentah/sudah/${filename}.JPG`);
+        if(!e && fs.existsSync(`${input_folder}/${filename}.JPG`)) fs.renameSync(`${input_folder}/${filename}.JPG`, `./input/mentah/sudah/${filename}.JPG`);
         console.log(filename + ' finish.')
         cb_rename && cb_rename(null, 'ok')
     })
