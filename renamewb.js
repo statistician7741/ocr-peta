@@ -7,10 +7,24 @@ const Tesseract = require('tesseract.js');
 const Clipper = require('image-clipper');
 const Canvas = require('canvas');
 Clipper.configure('canvas', Canvas);
-const pdf2img = require('pdf2img');
-const input_folder = `./input/mentah/20220616`
+const input_folder = `./input/mentah/scanned`
+if (!fs.existsSync(`./input`)) {
+    fs.mkdirSync(`./input`);
+}
+if (!fs.existsSync(`./input/mentah`)) {
+    fs.mkdirSync(`./input/mentah`);
+}
+if (!fs.existsSync(`./input/mentah/scanned`)) {
+    fs.mkdirSync(`./input/mentah/scanned`);
+}
 const input_ready_folder = `./input/mentah/ready`
+if (!fs.existsSync(`./input/mentah/ready`)) {
+    fs.mkdirSync(`./input/mentah/ready`);
+}
 const output_folder = `./output`
+if (!fs.existsSync(`./output`)) {
+    fs.mkdirSync(`./output`);
+}
 
 const semuapeta = fs.readdirSync(input_folder)
 var task = []
@@ -40,13 +54,16 @@ data[0].data.forEach((row, i) => {
 semuapeta.forEach(filename => {
     var name = filename
     task.push((cb_t) => {
-        renamePeta(name, 90, cb_t)
+        try {
+            renamePeta(name, 90, cb_t)
+        } catch (error) {
+            cb_t(null, 'failed')
+        }
     })
 })
 async.series(task, (e, f) => {
     console.log(e, f)
     console.log('====== FINISH ======')
-    // let shutdown = execSync(`shutdown /s`);
 })
 
 async function rotateImg(path, degree, cb) {
@@ -71,6 +88,9 @@ function renamePeta(nama, degree, cb_rename) {
             console.log('==> ', filename);
             rotateImg(input_ready_file, degree, () => {
                 Clipper(input_ready_file, function () {
+                    if (!fs.existsSync(`${output_folder}/cropped`)) {
+                        fs.mkdirSync(`${output_folder}/cropped`);
+                    }
                     this.crop(2550, 0, 780, 200)
                         // .resize(400, 90)
                         .quality(100)
@@ -94,17 +114,20 @@ function renamePeta(nama, degree, cb_rename) {
                 if (idbs) {
                     const kec = idbs[0].substring(4, 7)
                     const desa = idbs[0].substring(7, 10)
-                    if(!kolaka[kec]) {
+                    if (!kolaka[kec]) {
                         console.log('3. getIDAndRename failed. Kec not know')
                         console.log('Detected text: ', filename, idbs[0], text)
                         cb_g(null, '3. getIDAndRename failed')
                         return
                     }
-                    if(!kolaka[kec][desa]) {
+                    if (!kolaka[kec][desa]) {
                         console.log('3. getIDAndRename failed. Desa not know')
                         console.log('Detected text: ', filename, idbs[0], text)
                         cb_g(null, '3. getIDAndRename failed')
                         return
+                    }
+                    if (!fs.existsSync(`./output/finish`)) {
+                        fs.mkdirSync(`./output/finish`);
                     }
                     const kecdir = `./output/finish/${kec} ${kolaka[kec].name}`;
                     const desadir = `./output/finish/${kec} ${kolaka[kec].name}/${desa} ${kolaka[kec][desa].name}`;
