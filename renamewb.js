@@ -57,6 +57,7 @@ semuapeta.forEach(filename => {
         try {
             renamePeta(name, 90, cb_t)
         } catch (error) {
+            console.log(error);
             cb_t(null, 'failed')
         }
     })
