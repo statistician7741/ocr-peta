@@ -97,7 +97,7 @@ function renamePeta(nama, degree, cb_rename) {
                     }
                     this.crop(2550, 0, 780, 200)
                         // .resize(400, 90)
-                        .quality(100)
+                        // .quality(100)
                         .toFile(`${output_folder}/cropped/${filename}_ok.jpg`, function () {
                             console.log('2. cropImage done')
                             cb_c(null, '2. cropImage done')

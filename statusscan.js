@@ -2,11 +2,11 @@ const fs = require('fs');
 const XlsxPopulate = require('xlsx-populate');
 //read scanned files, count frequency
 const allScannedIdBsCount = {};
-const allScannedKecFolder = fs.readdirSync('./output/finish')
+const allScannedKecFolder = fs.readdirSync('./output/finish big size')
 allScannedKecFolder.forEach(kecFolderName => {
-  const allScannedDesaFolderName = fs.readdirSync(`./output/finish/${kecFolderName}`)
+  const allScannedDesaFolderName = fs.readdirSync(`./output/finish big size/${kecFolderName}`)
   allScannedDesaFolderName.forEach(scannedDesaFolderName => {
-    const allScannedBSName = fs.readdirSync(`./output/finish/${kecFolderName}/${scannedDesaFolderName}`)
+    const allScannedBSName = fs.readdirSync(`./output/finish big size/${kecFolderName}/${scannedDesaFolderName}`)
     allScannedBSName.forEach(bsFileName => {
       const idBs = bsFileName.replace(/_?\d?\d?\.jpg/, '')
       if (!allScannedIdBsCount[idBs]) allScannedIdBsCount[idBs] = 1;
@@ -33,7 +33,7 @@ XlsxPopulate.fromFileAsync(masterPath)
     if (fs.existsSync(__dirname + `/Status Scan.xlsx`)) {
       fs.unlinkSync(__dirname + `/Status Scan.xlsx`);
     }
-    workbook.toFileAsync(__dirname + `/Status Scan.xlsx`);
+    workbook.toFileAsync(__dirname + `/Status Scan 2.xlsx`);
   }).then(dataa => {
     console.log('Finished');
   })
